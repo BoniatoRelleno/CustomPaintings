@@ -232,12 +232,9 @@ internal class CustomPaintingModule
             return;
 
         if (_randomForTextureSelection == null)
-        {
-            _logger.LogError("Generator was not assigned. Possible game code change or mods conflict");
-            return;
-        }
+            SetSeedForTextureIndexGenerator(StartOfRound.Instance.randomMapSeed);
 
-        fileIndex = _randomForTextureSelection.Next(_paintingFiles.Length);
+        fileIndex = _randomForTextureSelection!.Next(_paintingFiles.Length);
         _paintingValues[painting.GetInstanceID()] = fileIndex;
         ApplyMaterial(painting, fileIndex);
         _logger.LogInfo($"Generated fileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");

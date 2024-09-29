@@ -14,4 +14,10 @@ Copy-Item "$PSScriptRoot/package/*" -Destination $output
 Copy-Item "$PSScriptRoot/README.md" -Destination $output
 Copy-Item "$PSScriptRoot/CHANGELOG.md" -Destination $output
 
-Compress-Archive -Path "$output/*" -DestinationPath "$PSScriptRoot/CustomPainting.zip"
+$resultFile = "$PSScriptRoot/CustomPainting.zip"
+
+if (Test-Path $resultFile) {
+    Remove-Item $resultFile
+}
+
+Compress-Archive -Path "$output/*" -DestinationPath $resultFile
