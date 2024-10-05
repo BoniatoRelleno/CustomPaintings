@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using BepInEx.Configuration;
-using CSync.Extensions;
-using CSync.Lib;
 
 namespace CustomPainting.Configuration
 {
-    public class Config : SyncedConfig2<Config>
+    public class Config
     {
         internal const string DefaultDirectory = "CustomPaintings";
 
@@ -15,18 +12,14 @@ namespace CustomPainting.Configuration
         [Obsolete($"Use now {nameof(AdditionalDirectories)}")]
         public ConfigEntry<string> Directory;
 
-        [DataMember]
-        public SyncedEntry<string> CustomUrls;
+        public ConfigEntry<string> CustomUrls;
 
-        [DataMember]
-        public SyncedEntry<bool> DefaultPaintings;
+        public ConfigEntry<bool> DefaultPaintings;
 
-        [DataMember]
-        public SyncedEntry<bool> ForceDownload;
+        public ConfigEntry<bool> ForceDownload;
         
-        public Config(ConfigFile cfg) : base(CustomPaintingsPatcher.ModGuid)
+        public Config(ConfigFile cfg)
         {
-            ConfigManager.Register(this);
 
             Directory = cfg.Bind(
                 new("General", "Directory"),
@@ -40,19 +33,19 @@ namespace CustomPainting.Configuration
                 new ConfigDescription("List of directories split by semi for painting textures search"));
 
 
-            CustomUrls = cfg.BindSyncedEntry(
+            CustomUrls = cfg.Bind(
                 new ("General", "Custom Urls"),
                 string.Empty,
                 new ConfigDescription("Custom urls of the images to download them as default (separate them with commas, for example: https://i.imgur.com/ePiClDl.png,https://i.imgur.com/yZCdjxh.png)")
             );
 
-            DefaultPaintings = cfg.BindSyncedEntry(
+            DefaultPaintings = cfg.Bind(
                     new("General", "Default Paintings"),
                     true,
                     new ConfigDescription("Enable it to use the default paintings of famous works")
             );
 
-            ForceDownload = cfg.BindSyncedEntry(
+            ForceDownload = cfg.Bind(
                     new("General", "Force Download"),
                     false,
                     new ConfigDescription("Enable it to download the url images in every launch (if it is false, the mod will download the textures only when creates the directory)")

@@ -38,14 +38,3 @@ For any problem or question you can comment in the issues section of my [Github]
   ![CustomPaintings Image 4](https://i.imgur.com/DgN9duW.png)
 
 </details>
-
-## Prepare to develop
-
-1. Install Lethal Company
-2. Install Bepinex to Lethal Company folder
-3. Use `prepareProject.ps1` to configure references in Project and setup output dir to `<Lethal Company dir>/BepInEx/plugins/CustomPainting`
-4. Launch CustomPainting.sln to develop
-
-## Pack
-
-Use script `package.ps1` to build and pack mod for import or upload.

@@ -7,17 +7,16 @@ using Unity.Netcode;
 namespace CustomPainting;
 
 [BepInPlugin(ModGuid, ModName, ModVersion)]
-[BepInDependency("com.sigurd.csync", "5.0.1")]
 public class CustomPaintingsPatcher : BaseUnityPlugin
 {
-    internal const string ModGuid = "Boniato.CustomPaintings";
+    private const string ModGuid = "Boniato.CustomPaintings";
     private const string ModName = "CustomPaintings";
     private const string ModVersion = "2.0.0";
 
     private readonly Harmony _harmony = new(ModGuid);
-    internal static CustomPaintingsPatcher? Instance;
+    private static CustomPaintingsPatcher? Instance;
     private static CustomPaintingModuleBase? _module;
-    private static Config _config;
+    private static Config? _config;
 
     void Awake()
     {
@@ -33,7 +32,7 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
         }
         else
         {
-            _module = new DummyCustomPaintingModule();
+            _module = new DummyCustomPaintingModule(logger);
             logger.LogDebug("Used dummy module");
         }
 
@@ -45,8 +44,14 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
     [HarmonyPrefix]
     private static void FindAndPatchPaintingItemWhenGameLoaded(StartOfRound __instance)
     {
+        var shouldPatchPainting = _module?.CheckLobbyOrPatchIt() ?? false;
+
         var paintingItem = __instance.allItemsList.itemsList.First(i => i.itemName == "Painting");
-        _module?.PatchPaintingItem(paintingItem);
+        if (shouldPatchPainting)
+        {
+            _module?.EnableSavingDataForPainting(paintingItem);
+        }
+        _module?.SetMaterialVariantsForPainting(paintingItem);
     }
 
     [HarmonyPatch(typeof(GrabbableObject), "Start")]
@@ -87,7 +92,7 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
         _module?.LoadPaintingTextureByIndex(__instance, saveData);
     }
 
-    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.ResetGameValuesToDefault))]
+    [HarmonyPatch(typeof(GameNetworkManager), "ResetGameValuesToDefault")]
     [HarmonyPostfix]
     public static void ClearSelectedTexturesAfterEndGame()
     {

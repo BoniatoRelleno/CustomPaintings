@@ -9,28 +9,20 @@ namespace CustomPainting;
 
 internal class CustomPaintingModule : CustomPaintingModuleBase
 {
-    private readonly ManualLogSource _logger;
-
     private readonly string[] _paintingFiles;
     private System.Random? _randomForTextureSelection;
     private readonly Dictionary<int, int> _paintingValues = new();
 
-    internal CustomPaintingModule(IEnumerable<string> paintingFiles, ManualLogSource logger)
+    internal CustomPaintingModule(IEnumerable<string> paintingFiles, ManualLogSource logger) : base(logger)
     {
         _paintingFiles = paintingFiles.ToArray();
-        _logger = logger;
     }
 
-    internal override void PatchPaintingItemCore(Item paintingItem)
-    {
-        SetPaintingVariants(paintingItem);
-    }
-
-    private void SetPaintingVariants(Item paintingItem)
+    internal override void SetMaterialVariantsForPainting(Item paintingItem)
     {
         if (_paintingFiles.Length <= 0) return;
 
-        _logger.LogInfo("Updating textures");
+        Logger.LogInfo("Updating textures");
         var baseMaterialVariant = paintingItem.materialVariants[0];
         paintingItem.materialVariants = _paintingFiles.Select(f =>
             {
@@ -46,16 +38,16 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
 
         for (var i = 0; i < _paintingFiles.Length; i++)
         {
-            _logger.LogDebug($"File #{i} = {_paintingFiles[i]}");
+            Logger.LogDebug($"File #{i} = {_paintingFiles[i]}");
         }
-        _logger.LogInfo("Textures updated");
+        Logger.LogInfo("Textures updated");
     }
 
     internal override void GenerateTextureIndexForPainting(GrabbableObject painting)
     {
         if (!StartOfRound.Instance.IsServer && StartOfRound.Instance.shipHasLanded)
         {
-            _logger.LogDebug($"Generating and applying skipped (IsServer = {StartOfRound.Instance.IsServer} shipHasLanded = {StartOfRound.Instance.shipHasLanded})");
+            Logger.LogDebug($"Generating and applying skipped (IsServer = {StartOfRound.Instance.IsServer} shipHasLanded = {StartOfRound.Instance.shipHasLanded})");
             return;
         }
 
@@ -68,24 +60,24 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
         fileIndex = _randomForTextureSelection!.Next(_paintingFiles.Length);
         _paintingValues[painting.GetInstanceID()] = fileIndex;
         ApplyMaterial(painting, fileIndex);
-        _logger.LogInfo($"Generated fileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
+        Logger.LogInfo($"Generated fileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
     }
 
     private void ApplyMaterial(GrabbableObject painting, int fileIndex)
     {
         if (fileIndex < 0)
         {
-            _logger.LogError($"Incorrect fileIndex: {fileIndex}");
+            Logger.LogError($"Incorrect fileIndex: {fileIndex}");
         }
         else if (fileIndex >= painting.itemProperties.materialVariants.Length)
         {
-            _logger.LogError($"FileIndex ({fileIndex}) is greater then available materials ({painting.itemProperties.materialVariants.Length})");
+            Logger.LogError($"FileIndex ({fileIndex}) is greater then available materials ({painting.itemProperties.materialVariants.Length})");
         }
         else
         {
             painting.gameObject.GetComponent<MeshRenderer>().sharedMaterial =
                 painting.itemProperties.materialVariants[fileIndex];
-            _logger.LogInfo($"Applied fileIndex {fileIndex} texture");
+            Logger.LogInfo($"Applied fileIndex {fileIndex} texture");
         }
     }
 
@@ -101,7 +93,7 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
 
             if (!_paintingValues.TryGetValue(grabbable.GetInstanceID(), out var fileIndex))
             {
-                _logger.LogWarning($"Cannot find file index for object {grabbable.gameObject} ({grabbable.GetInstanceID()})");
+                Logger.LogWarning($"Cannot find file index for object {grabbable.gameObject} ({grabbable.GetInstanceID()})");
                 continue;
             }
 
@@ -112,7 +104,7 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
     internal override void SetSeedForTextureIndexGenerator(int roundSeed)
     {
         var seed = roundSeed + 300;
-        _logger.LogDebug($"Used seed {seed}");
+        Logger.LogDebug($"Used seed {seed}");
         _randomForTextureSelection = new(seed);
     }
 
@@ -120,10 +112,10 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
     {
         if (_paintingValues.TryGetValue(painting.GetInstanceID(), out var fileIndex))
         {
-            _logger.LogInfo($"FileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
+            Logger.LogInfo($"FileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
             return fileIndex;
         }
-        _logger.LogWarning($"Dictionary doesn't contain fileIndex for object {painting.gameObject} ({painting.GetInstanceID()})");
+        Logger.LogWarning($"Dictionary doesn't contain fileIndex for object {painting.gameObject} ({painting.GetInstanceID()})");
 
         return default;
     }
@@ -132,13 +124,13 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
     {
         if (fileIndex < 0)
         {
-            _logger.LogError($"Incorrect fileIndex: {fileIndex}");
+            Logger.LogError($"Incorrect fileIndex: {fileIndex}");
             return;
         }
 
         if (fileIndex > _paintingFiles.Length)
         {
-            _logger.LogWarning($"FileIndex ({fileIndex}) is greater than files count ({_paintingFiles.Length})");
+            Logger.LogWarning($"FileIndex ({fileIndex}) is greater than files count ({_paintingFiles.Length})");
             return;
         }
 
@@ -146,7 +138,7 @@ internal class CustomPaintingModule : CustomPaintingModuleBase
 
         ApplyMaterial(painting, fileIndex);
 
-        _logger.LogInfo($"Loaded fileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
+        Logger.LogInfo($"Loaded fileIndex ({fileIndex}) for object {painting.gameObject} ({painting.GetInstanceID()})");
     }
 
     internal override void ClearSelectedTextures()

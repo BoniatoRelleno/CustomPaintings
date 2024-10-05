@@ -1,16 +1,51 @@
-﻿using Unity.Netcode;
+﻿using BepInEx.Logging;
+using Unity.Netcode;
 
 namespace CustomPainting;
 
-internal abstract class CustomPaintingModuleBase
+internal abstract class CustomPaintingModuleBase(ManualLogSource logger)
 {
-    internal void PatchPaintingItem(Item paintingItem)
+    protected readonly ManualLogSource Logger = logger;
+
+    internal bool CheckLobbyOrPatchIt()
     {
-        paintingItem.saveItemVariable = true;
-        PatchPaintingItemCore(paintingItem);
+        var shouldPatchPainting = false;
+        var lobby = GameNetworkManager.Instance?.currentLobby;
+        if (lobby == null)
+        {
+            Logger.LogDebug("Lobby not created");
+        }
+        else
+        {
+            if (StartOfRound.Instance.IsServer)
+            {
+                lobby.Value.SetData("CustomPaintings", bool.TrueString);
+                shouldPatchPainting = true;
+            }
+            else
+            {
+                var value = lobby.Value.GetData("CustomPaintings");
+                if (value == bool.TrueString)
+                {
+                    shouldPatchPainting = true;
+                    Logger.LogDebug("Mod enabled");
+                }
+                else
+                {
+                    Logger.LogDebug("Host doesn't use mod");
+                }
+            }
+        }
+
+        return shouldPatchPainting;
     }
 
-    internal abstract void PatchPaintingItemCore(Item paintingItem);
+    internal void EnableSavingDataForPainting(Item paintingItem)
+    {
+        paintingItem.saveItemVariable = true;
+    }
+
+    internal abstract void SetMaterialVariantsForPainting(Item paintingItem);
 
     internal abstract void GenerateTextureIndexForPainting(GrabbableObject painting);
 

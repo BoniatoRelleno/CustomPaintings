@@ -10,9 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Sigurd.BepInEx.CSync" Version="5.0.1">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
+	  <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
 	</ItemGroup>
 
 	<ItemGroup Label="GameAssetsReferences">

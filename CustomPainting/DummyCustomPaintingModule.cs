@@ -1,10 +1,11 @@
-﻿using Unity.Netcode;
+﻿using BepInEx.Logging;
+using Unity.Netcode;
 
 namespace CustomPainting;
 
-internal class DummyCustomPaintingModule : CustomPaintingModuleBase
+internal class DummyCustomPaintingModule(ManualLogSource logger) : CustomPaintingModuleBase(logger)
 {
-    internal override void PatchPaintingItemCore(Item paintingItem)
+    internal override void SetMaterialVariantsForPainting(Item paintingItem)
     {
     }
 

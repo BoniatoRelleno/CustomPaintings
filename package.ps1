@@ -11,7 +11,6 @@ dotnet publish "$PSScriptRoot/CustomPainting/CustomPainting.csproj" -o $publishP
 
 Copy-Item "$PSScriptRoot/publish/CustomPainting.dll" -Destination $output
 Copy-Item "$PSScriptRoot/package/*" -Destination $output
-Copy-Item "$PSScriptRoot/README.md" -Destination $output
 Copy-Item "$PSScriptRoot/CHANGELOG.md" -Destination $output
 
 $resultFile = "$PSScriptRoot/CustomPainting.zip"
