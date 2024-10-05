@@ -1,0 +1,9 @@
+{
+  "name": "CustomPaintings",
+  "version_number": "2.0.0",
+  "website_url": "https://github.com/BoniatoRelleno/CustomPaintings",
+  "description": "Add your own custom paintings to the game! This is an improved version of LethalPaintings.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
