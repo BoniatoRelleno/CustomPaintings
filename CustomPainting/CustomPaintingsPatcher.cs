@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BepInEx;
+using CustomPainting.Configuration;
 using HarmonyLib;
 using Unity.Netcode;
 
@@ -15,17 +16,29 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
 
     private readonly Harmony _harmony = new(ModGuid);
     internal static CustomPaintingsPatcher? Instance;
-    private static CustomPaintingModule? _module;
+    private static CustomPaintingModuleBase? _module;
+    private static Config _config;
 
     void Awake()
     {
         Instance ??= this;
-        _module ??= new(Config, ModGuid);
+        var logger = BepInEx.Logging.Logger.CreateLogSource(ModGuid);
+        _config = new Config(Config);
+        var textures = new TextureFilesLoader(_config, logger).Load();
 
-        if (_module.HasTextures)
+        if (textures.Any())
         {
-            _harmony.PatchAll(typeof(CustomPaintingsPatcher));
+            _module = new CustomPaintingModule(textures, logger);
+            logger.LogDebug("Used real module");
         }
+        else
+        {
+            _module = new DummyCustomPaintingModule();
+            logger.LogDebug("Used dummy module");
+        }
+
+        _harmony.PatchAll(typeof(CustomPaintingsPatcher));
+        logger.LogInfo("------- CustomPaintings loaded -------");
     }
 
     [HarmonyPatch(typeof(StartOfRound), "Start")]
