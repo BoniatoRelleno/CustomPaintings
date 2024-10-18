@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<OutputPath>\\leviathan\Lethal Company\BepInEx\plugins\CustomPainting</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+	</ItemGroup>
+
+	<ItemGroup Label="GameAssetsReferences">
+		<Reference Include="0Harmony">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\BepInEx\core\0Harmony.dll</HintPath>
+		</Reference>
+		<Reference Include="Assembly-CSharp">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="BepInEx">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\BepInEx\core\BepInEx.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Collections">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\Unity.Collections.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Netcode.Runtime">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\UnityEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestModule">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestTextureModule">
+			<Private>false</Private>
+			<HintPath>\\leviathan\Lethal Company\Lethal Company_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>
