@@ -15,7 +15,7 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
 
     private readonly Harmony _harmony = new(ModGuid);
     private static CustomPaintingsPatcher? Instance;
-    private static CustomPaintingModuleBase? _module;
+    private static CustomPaintingsModuleBase? _module;
     private static Config? _config;
 
     void Awake()
@@ -27,12 +27,12 @@ public class CustomPaintingsPatcher : BaseUnityPlugin
 
         if (textures.Any())
         {
-            _module = new CustomPaintingModule(textures, logger);
+            _module = new CustomPaintingsModule(textures, logger);
             logger.LogDebug("Used real module");
         }
         else
         {
-            _module = new DummyCustomPaintingModule(logger);
+            _module = new DummyCustomPaintingsModule(logger);
             logger.LogDebug("Used dummy module");
         }
 

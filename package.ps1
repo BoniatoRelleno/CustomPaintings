@@ -7,13 +7,13 @@ if (Test-Path $output) {
 
 New-Item $output -ItemType Directory
 
-dotnet publish "$PSScriptRoot/CustomPainting/CustomPainting.csproj" -o $publishPath
+dotnet publish "$PSScriptRoot/CustomPaintings/CustomPaintings.csproj" -o $publishPath
 
-Copy-Item "$PSScriptRoot/publish/CustomPainting.dll" -Destination $output
+Copy-Item "$PSScriptRoot/publish/CustomPaintings.dll" -Destination $output
 Copy-Item "$PSScriptRoot/package/*" -Destination $output
 Copy-Item "$PSScriptRoot/CHANGELOG.md" -Destination $output
 
-$resultFile = "$PSScriptRoot/CustomPainting.zip"
+$resultFile = "$PSScriptRoot/CustomPaintings.zip"
 
 if (Test-Path $resultFile) {
     Remove-Item $resultFile

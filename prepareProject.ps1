@@ -1,5 +1,5 @@
 $gamePath = "C:/Program Files (x86)/Steam/steamapps/common/Lethal Company";
-$csproj = "$PSScriptRoot/CustomPainting/CustomPainting.csproj";
+$csproj = "$PSScriptRoot/CustomPaintings/CustomPaintings.csproj";
 
 $systemIsWindows = $IsWindows ?? ($Env:OS.Contains(("Windows")));
 

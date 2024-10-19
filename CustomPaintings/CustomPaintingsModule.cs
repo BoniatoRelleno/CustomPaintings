@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace CustomPainting;
 
-internal class CustomPaintingModule : CustomPaintingModuleBase
+internal class CustomPaintingsModule : CustomPaintingsModuleBase
 {
     private readonly string[] _paintingFiles;
     private System.Random? _randomForTextureSelection;
     private readonly Dictionary<int, int> _paintingValues = new();
 
-    internal CustomPaintingModule(IEnumerable<string> paintingFiles, ManualLogSource logger) : base(logger)
+    internal CustomPaintingsModule(IEnumerable<string> paintingFiles, ManualLogSource logger) : base(logger)
     {
         _paintingFiles = paintingFiles.ToArray();
     }

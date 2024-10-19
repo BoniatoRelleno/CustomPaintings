@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 namespace CustomPainting;
 
-internal class DummyCustomPaintingModule(ManualLogSource logger) : CustomPaintingModuleBase(logger)
+internal class DummyCustomPaintingsModule(ManualLogSource logger) : CustomPaintingsModuleBase(logger)
 {
     internal override void SetMaterialVariantsForPainting(Item paintingItem)
     {

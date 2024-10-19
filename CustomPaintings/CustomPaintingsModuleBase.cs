@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 namespace CustomPainting;
 
-internal abstract class CustomPaintingModuleBase(ManualLogSource logger)
+internal abstract class CustomPaintingsModuleBase(ManualLogSource logger)
 {
     protected readonly ManualLogSource Logger = logger;
 
